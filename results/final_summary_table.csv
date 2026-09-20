@@ -1,0 +1,5 @@
+scenario,comparison,n_pairs,median_baseline_pdr_percent,median_adaptive_pdr_percent,mean_paired_pdr_difference_pp,mean_paired_pdr_ci95_low,mean_paired_pdr_ci95_high,median_baseline_recovery_seconds,median_adaptive_recovery_seconds,mean_paired_overhead_difference,interpretation
+A,full adaptive vs baseline,20,100.000000,100.000000,0.000000,0.000000,0.000000,-1.000000,-1.000000,0.000000,Negative control; no trigger and identical outputs
+B,full adaptive vs baseline,20,97.098326,97.063421,0.056946,-0.119379,0.312319,0.000000,0.000000,0.002518,No stable service benefit; overhead increased in every pair
+C,full adaptive vs baseline,20,97.074559,97.209848,-0.658798,-2.776978,0.604391,5.000000,5.000000,0.001292,Median effect near zero with adverse tail risk
+C,failure threshold 20 vs baseline,20,97.074559,97.326505,0.433504,0.082361,0.883806,5.000000,4.000000,0.001082,Exploratory redesign candidate requiring independent validation

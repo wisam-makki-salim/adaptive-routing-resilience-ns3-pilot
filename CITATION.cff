@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this research pilot, please cite it using the metadata below."
+title: "Adaptive Routing under Mobility and Failures: A Reproducible ns-3 Pilot with Robustness and Component Ablation"
+type: software
+authors:
+  - family-names: Salim
+    given-names: Wisam Makki
+    orcid: "https://orcid.org/0009-0000-6998-3912"
+repository-code: "https://github.com/wisam-makki-salim/adaptive-routing-resilience-ns3-pilot"
+url: "https://github.com/wisam-makki-salim/adaptive-routing-resilience-ns3-pilot"
+license: MIT
+version: 1.0.0
+date-released: 2026-09-20
+keywords:
+  - ns-3
+  - OLSR
+  - adaptive routing
+  - resilient networking
+  - wireless networks
+  - reproducible research

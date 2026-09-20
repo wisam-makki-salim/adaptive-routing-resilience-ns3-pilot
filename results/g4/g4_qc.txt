@@ -1,0 +1,6 @@
+G4_QC status=PASS rows=120 expected_rows=120 unique_keys=120 missing_cells=0
+SCENARIO_A adaptive_transitions=0 exact_paired_metric_differences=0
+SCENARIO_B signal_transitions_per_run_min=1 max=3 failure_transitions=0
+SCENARIO_C signal_transitions=0 failure_transitions_per_run=1
+DISRUPTION_TARGET paired_target_mismatches=0
+FINAL_RUNS seed_run_range=101-120 configuration_locked=yes

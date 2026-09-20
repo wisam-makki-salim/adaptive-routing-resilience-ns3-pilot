@@ -1,0 +1,2 @@
+node,time_seconds,state,reason,neighbor
+0,62.121085,reactive,final_tx_failures,00:00:00:00:00:07

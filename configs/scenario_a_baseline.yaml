@@ -1,0 +1,32 @@
+gate: G2
+scenario: A_normal
+mechanism: fixed_parameter_olsr
+simulator: ns-3.47
+seed: 20260920
+development_runs: [1, 2, 3, 4, 5]
+simulation_seconds: 120
+warmup_seconds: 20
+traffic_stop_seconds: 110
+topology:
+  nodes: 16
+  layout: 4x4_grid
+  spacing_m: 60
+  initial_position_jitter_m: [-2, 2]
+wireless:
+  standard: IEEE_802.11g
+  data_mode: ErpOfdmRate6Mbps
+  control_mode: ErpOfdmRate6Mbps
+  propagation: RangePropagationLossModel
+  max_range_m: 75
+routing:
+  protocol: OLSRv1
+  hello_interval_s: 2
+  tc_interval_s: 5
+traffic:
+  protocol: UDP
+  flows:
+    - {source: 0, destination: 15, destination_port: 9000}
+    - {source: 3, destination: 12, destination_port: 9001}
+  payload_bytes: 512
+  packet_interval_s: 0.02
+  application_start_jitter_s: [0, 0.5]

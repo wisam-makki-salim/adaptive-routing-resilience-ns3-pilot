@@ -1,0 +1,4 @@
+G3_TRANSITION time=3.4 state=REACTIVE reason=signal_risk
+G3_TRANSITION time=15.2 state=STABLE reason=recovery_hold_down
+G3_TRANSITION time=18.585 state=REACTIVE reason=final_tx_failures
+G3_VALIDATION status=PASS real_trace_samples=28 reactive_timers=1 stable_timers=1 transitions=3

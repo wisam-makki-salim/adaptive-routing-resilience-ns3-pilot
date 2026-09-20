@@ -1,0 +1,21 @@
+gate: G6
+purpose: limited robustness and causal ablation
+locked_input: results/g4/raw/g4_final_runs.csv
+paired_runs: [101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120]
+bootstrap:
+  resamples: 50000
+  seed: 20260920
+component_ablation_scenario_c:
+  baseline: {source: G4}
+  full_adaptive: {source: G4, hello_seconds: 0.5, tc_seconds: 1.0}
+  detection_only: {hello_seconds: 2.0, tc_seconds: 5.0}
+  hello_only: {hello_seconds: 0.5, tc_seconds: 5.0}
+  tc_only: {hello_seconds: 2.0, tc_seconds: 1.0}
+threshold_sensitivity:
+  scenario_b_risk_dbm: [-78.0, -81.0, -84.0]
+  scenario_c_final_tx_failures: [20, 40, 80]
+diagnostic:
+  scenario: C
+  run: 102
+  variant: failure_trigger_disabled
+decision_rule: retain every run; do not tune after observing outcomes

@@ -1,0 +1,7 @@
+variant,pdr_percent,normalized_overhead,recovery_seconds,failure_transitions,pdr_difference_vs_baseline
+baseline,95.512749,0.017424,7.000000,0,0.0
+failure_disabled,95.512749,0.017424,7.000000,0,0.0
+detection_only,95.512749,0.017424,7.000000,1,0.0
+hello_only,76.338938,0.023060,36.000000,1,-19.173811
+tc_only,95.512749,0.017424,7.000000,1,0.0
+full_adaptive,76.338938,0.023060,36.000000,1,-19.173811

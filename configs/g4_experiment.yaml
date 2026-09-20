@@ -1,0 +1,38 @@
+gate: G4
+simulator: ns-3.47
+seed: 20260920
+final_runs: [101, 120]
+paired_design: true
+mechanisms: [baseline, adaptive]
+scenarios:
+  A:
+    condition: normal_static
+  B:
+    condition: progressive_mobility_of_active_source_next_hop
+    movement_start_s: 50
+    maximum_displacement_s: 75
+  C:
+    condition: radio_off_failure_of_active_source_next_hop
+    failure_time_s: 60
+topology:
+  nodes: 16
+  nominal_layout: 4x4_grid
+  spacing_m: 60
+  seeded_position_jitter_m: [-2, 2]
+wireless:
+  standard: IEEE_802.11g
+  data_rate: ErpOfdmRate6Mbps
+  tx_power_dBm: 20
+  propagation: LogDistancePropagationLossModel
+  exponent: 2.5
+traffic:
+  flows: 2
+  payload_bytes: 512
+  packet_interval_s: 0.02
+  warmup_s: 20
+  stop_s: 110
+  simulation_stop_s: 120
+recovery_definition:
+  aggregation_window_s: 1
+  sustained_windows: 5
+  threshold_fraction_of_pre_event_median: 0.9

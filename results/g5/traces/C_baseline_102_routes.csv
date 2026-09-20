@@ -1,0 +1,6 @@
+time_seconds,flow,event,next_hop,next_hop_node
+20.000000,0,route_available,10.10.0.7,6
+20.000000,1,route_available,10.10.0.6,5
+64.500000,0,next_hop_change,10.10.0.10,9
+64.500000,1,next_hop_change,10.10.0.11,10
+80.500000,1,next_hop_change,10.10.0.6,5

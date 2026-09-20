@@ -1,0 +1,6 @@
+G1_TOPOLOGY nodes=16 edges=24
+primary=[0, 1, 2, 3, 7, 11, 15]
+internally_node_disjoint_alternative=[0, 4, 5, 6, 10, 14, 15]
+path_after_node_1_failure=[0, 4, 5, 6, 7, 11, 15]
+G1_SMOKE ns3=3.47 run=1 nodes=3 hops=2 tx=100 rx=100 pdr_percent=100.000 mean_delay_ms=1.946
+G1_OLSR_RUNTIME hello_count=13 post_change_fast_intervals=9 times=0.29631,2.38562,4.11859,6.00208,6.52393,7.09086,7.51648,8.08678,8.60295,9.09649,9.529,10.021,10.5585,

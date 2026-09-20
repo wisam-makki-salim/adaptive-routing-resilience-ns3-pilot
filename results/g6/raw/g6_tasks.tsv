@@ -1,0 +1,141 @@
+C	detection_only	101	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=5.0
+C	hello_only	101	--reactiveHelloSeconds=0.5 --reactiveTcSeconds=5.0
+C	tc_only	101	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=1.0
+C	failure20	101	--finalFailureThreshold=20
+C	failure80	101	--finalFailureThreshold=80
+B	signal78	101	--riskThresholdDbm=-78.0
+B	signal84	101	--riskThresholdDbm=-84.0
+C	detection_only	102	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=5.0
+C	hello_only	102	--reactiveHelloSeconds=0.5 --reactiveTcSeconds=5.0
+C	tc_only	102	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=1.0
+C	failure20	102	--finalFailureThreshold=20
+C	failure80	102	--finalFailureThreshold=80
+B	signal78	102	--riskThresholdDbm=-78.0
+B	signal84	102	--riskThresholdDbm=-84.0
+C	detection_only	103	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=5.0
+C	hello_only	103	--reactiveHelloSeconds=0.5 --reactiveTcSeconds=5.0
+C	tc_only	103	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=1.0
+C	failure20	103	--finalFailureThreshold=20
+C	failure80	103	--finalFailureThreshold=80
+B	signal78	103	--riskThresholdDbm=-78.0
+B	signal84	103	--riskThresholdDbm=-84.0
+C	detection_only	104	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=5.0
+C	hello_only	104	--reactiveHelloSeconds=0.5 --reactiveTcSeconds=5.0
+C	tc_only	104	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=1.0
+C	failure20	104	--finalFailureThreshold=20
+C	failure80	104	--finalFailureThreshold=80
+B	signal78	104	--riskThresholdDbm=-78.0
+B	signal84	104	--riskThresholdDbm=-84.0
+C	detection_only	105	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=5.0
+C	hello_only	105	--reactiveHelloSeconds=0.5 --reactiveTcSeconds=5.0
+C	tc_only	105	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=1.0
+C	failure20	105	--finalFailureThreshold=20
+C	failure80	105	--finalFailureThreshold=80
+B	signal78	105	--riskThresholdDbm=-78.0
+B	signal84	105	--riskThresholdDbm=-84.0
+C	detection_only	106	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=5.0
+C	hello_only	106	--reactiveHelloSeconds=0.5 --reactiveTcSeconds=5.0
+C	tc_only	106	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=1.0
+C	failure20	106	--finalFailureThreshold=20
+C	failure80	106	--finalFailureThreshold=80
+B	signal78	106	--riskThresholdDbm=-78.0
+B	signal84	106	--riskThresholdDbm=-84.0
+C	detection_only	107	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=5.0
+C	hello_only	107	--reactiveHelloSeconds=0.5 --reactiveTcSeconds=5.0
+C	tc_only	107	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=1.0
+C	failure20	107	--finalFailureThreshold=20
+C	failure80	107	--finalFailureThreshold=80
+B	signal78	107	--riskThresholdDbm=-78.0
+B	signal84	107	--riskThresholdDbm=-84.0
+C	detection_only	108	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=5.0
+C	hello_only	108	--reactiveHelloSeconds=0.5 --reactiveTcSeconds=5.0
+C	tc_only	108	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=1.0
+C	failure20	108	--finalFailureThreshold=20
+C	failure80	108	--finalFailureThreshold=80
+B	signal78	108	--riskThresholdDbm=-78.0
+B	signal84	108	--riskThresholdDbm=-84.0
+C	detection_only	109	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=5.0
+C	hello_only	109	--reactiveHelloSeconds=0.5 --reactiveTcSeconds=5.0
+C	tc_only	109	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=1.0
+C	failure20	109	--finalFailureThreshold=20
+C	failure80	109	--finalFailureThreshold=80
+B	signal78	109	--riskThresholdDbm=-78.0
+B	signal84	109	--riskThresholdDbm=-84.0
+C	detection_only	110	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=5.0
+C	hello_only	110	--reactiveHelloSeconds=0.5 --reactiveTcSeconds=5.0
+C	tc_only	110	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=1.0
+C	failure20	110	--finalFailureThreshold=20
+C	failure80	110	--finalFailureThreshold=80
+B	signal78	110	--riskThresholdDbm=-78.0
+B	signal84	110	--riskThresholdDbm=-84.0
+C	detection_only	111	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=5.0
+C	hello_only	111	--reactiveHelloSeconds=0.5 --reactiveTcSeconds=5.0
+C	tc_only	111	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=1.0
+C	failure20	111	--finalFailureThreshold=20
+C	failure80	111	--finalFailureThreshold=80
+B	signal78	111	--riskThresholdDbm=-78.0
+B	signal84	111	--riskThresholdDbm=-84.0
+C	detection_only	112	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=5.0
+C	hello_only	112	--reactiveHelloSeconds=0.5 --reactiveTcSeconds=5.0
+C	tc_only	112	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=1.0
+C	failure20	112	--finalFailureThreshold=20
+C	failure80	112	--finalFailureThreshold=80
+B	signal78	112	--riskThresholdDbm=-78.0
+B	signal84	112	--riskThresholdDbm=-84.0
+C	detection_only	113	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=5.0
+C	hello_only	113	--reactiveHelloSeconds=0.5 --reactiveTcSeconds=5.0
+C	tc_only	113	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=1.0
+C	failure20	113	--finalFailureThreshold=20
+C	failure80	113	--finalFailureThreshold=80
+B	signal78	113	--riskThresholdDbm=-78.0
+B	signal84	113	--riskThresholdDbm=-84.0
+C	detection_only	114	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=5.0
+C	hello_only	114	--reactiveHelloSeconds=0.5 --reactiveTcSeconds=5.0
+C	tc_only	114	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=1.0
+C	failure20	114	--finalFailureThreshold=20
+C	failure80	114	--finalFailureThreshold=80
+B	signal78	114	--riskThresholdDbm=-78.0
+B	signal84	114	--riskThresholdDbm=-84.0
+C	detection_only	115	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=5.0
+C	hello_only	115	--reactiveHelloSeconds=0.5 --reactiveTcSeconds=5.0
+C	tc_only	115	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=1.0
+C	failure20	115	--finalFailureThreshold=20
+C	failure80	115	--finalFailureThreshold=80
+B	signal78	115	--riskThresholdDbm=-78.0
+B	signal84	115	--riskThresholdDbm=-84.0
+C	detection_only	116	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=5.0
+C	hello_only	116	--reactiveHelloSeconds=0.5 --reactiveTcSeconds=5.0
+C	tc_only	116	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=1.0
+C	failure20	116	--finalFailureThreshold=20
+C	failure80	116	--finalFailureThreshold=80
+B	signal78	116	--riskThresholdDbm=-78.0
+B	signal84	116	--riskThresholdDbm=-84.0
+C	detection_only	117	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=5.0
+C	hello_only	117	--reactiveHelloSeconds=0.5 --reactiveTcSeconds=5.0
+C	tc_only	117	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=1.0
+C	failure20	117	--finalFailureThreshold=20
+C	failure80	117	--finalFailureThreshold=80
+B	signal78	117	--riskThresholdDbm=-78.0
+B	signal84	117	--riskThresholdDbm=-84.0
+C	detection_only	118	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=5.0
+C	hello_only	118	--reactiveHelloSeconds=0.5 --reactiveTcSeconds=5.0
+C	tc_only	118	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=1.0
+C	failure20	118	--finalFailureThreshold=20
+C	failure80	118	--finalFailureThreshold=80
+B	signal78	118	--riskThresholdDbm=-78.0
+B	signal84	118	--riskThresholdDbm=-84.0
+C	detection_only	119	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=5.0
+C	hello_only	119	--reactiveHelloSeconds=0.5 --reactiveTcSeconds=5.0
+C	tc_only	119	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=1.0
+C	failure20	119	--finalFailureThreshold=20
+C	failure80	119	--finalFailureThreshold=80
+B	signal78	119	--riskThresholdDbm=-78.0
+B	signal84	119	--riskThresholdDbm=-84.0
+C	detection_only	120	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=5.0
+C	hello_only	120	--reactiveHelloSeconds=0.5 --reactiveTcSeconds=5.0
+C	tc_only	120	--reactiveHelloSeconds=2.0 --reactiveTcSeconds=1.0
+C	failure20	120	--finalFailureThreshold=20
+C	failure80	120	--finalFailureThreshold=80
+B	signal78	120	--riskThresholdDbm=-78.0
+B	signal84	120	--riskThresholdDbm=-84.0
+C	failure_disabled	102	--enableFailureTrigger=false

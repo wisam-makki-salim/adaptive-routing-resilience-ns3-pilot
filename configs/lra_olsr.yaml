@@ -1,0 +1,26 @@
+gate: G3
+mechanism: LRA-OLSR
+state_machine: [STABLE, REACTIVE]
+signal_input:
+  source: WifiPhy.MonitorSnifferRx
+  statistic: EWMA_signal_dBm
+  granularity: per_transmitting_MAC_neighbor
+  alpha: 0.3
+  risk_threshold_dBm: -81
+  recovery_threshold_dBm: -75
+  consecutive_risk_samples: 3
+failure_input:
+  source: WifiRemoteStationManager.MacTxFinalDataFailed
+  consecutive_final_failures: 40
+  failure_burst_window_s: 1
+stable_timers:
+  hello_interval_s: 2.0
+  tc_interval_s: 5.0
+reactive_timers:
+  hello_interval_s: 0.5
+  tc_interval_s: 1.0
+recovery:
+  hold_down_s: 10
+  hysteresis_dB: 6
+ablation:
+  no_reversion_supported: true

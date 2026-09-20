@@ -1,0 +1,9 @@
+metric,baseline,adaptive,adaptive_minus_baseline
+pdr_percent,95.512749,76.338938,-19.173811
+min_flow_pdr_percent,94.372776,58.060201,-36.312575
+delay_p95_ms,20.0,18.0,-2.0
+goodput_kbps,390.394311,312.024178,-78.37013300000001
+normalized_overhead,0.017424,0.02306,0.005636000000000002
+recovery_seconds,7.0,36.0,29.0
+next_hop_changes,3.0,6.0,3.0
+route_unavailable_samples,0.0,0.0,0.0

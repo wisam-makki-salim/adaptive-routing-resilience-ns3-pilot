@@ -1,0 +1,10 @@
+scenario,variant,n_runs,runs_with_any_trigger,signal_transitions,failure_transitions,recoveries
+C,full_adaptive,20,20,0,20,0
+C,detection_only,20,20,0,20,0
+C,hello_only,20,20,0,20,0
+C,tc_only,20,20,0,20,0
+C,failure20,20,20,0,21,0
+C,failure80,20,0,0,0,0
+B,signal78,20,20,317,0,0
+B,full_adaptive,20,20,39,0,0
+B,signal84,20,19,0,19,0

@@ -1,0 +1,21 @@
+# Local and intermediate artifacts
+tmp/
+__pycache__/
+*.pyc
+*.pyo
+
+# Gate archives are preserved outside GitHub
+Germany_PhD_Research_Pilot_2_G*.zip
+
+# Editable authoring file; the final PDF is tracked
+Wisam_Makki_Salim_Adaptive_Routing_Pilot_Technical_Note.docx
+
+# Per-run staging rows are redundant with the combined raw CSV files
+results/**/raw/*.row
+
+# Local ns-3 build trees and editor files
+build/
+cmake-cache/
+.vscode/
+.idea/
+*~
