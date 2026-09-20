@@ -10,17 +10,17 @@ Can a lightweight adaptive routing-control mechanism improve service resilience 
 
 The locked evaluation does not support a general superiority claim. Adaptive service effects vary across paired seeds, while routing overhead increases whenever the controller reacts. Component ablation shows that shortening the OLSR HELLO interval reproduces the full mechanism's cost and adverse tail; event detection without timer changes reproduces the baseline exactly. A lower failure threshold is retained as an exploratory redesign candidate for independent validation.
 
-The [four-page technical research note](Wisam_Makki_Salim_Adaptive_Routing_Pilot_Technical_Note.pdf) provides the compact supervisor-facing account of the study.
+The [four-page technical research note](Wisam_Makki_Salim_Adaptive_Routing_Pilot_Technical_Note.pdf) provides a compact account of the study.
 
-## Current gate
+## Repository contents
 
-G7 is complete. The repository includes executable simulations, locked configurations, raw and processed results, uncertainty analysis, diagnostic traces, component ablation, figures, a four-page technical note, and supervisor-facing text. Supervisor-specific alignment remains for G8.
+The repository includes executable simulations, fixed configurations, raw and processed results, uncertainty analysis, diagnostic traces, component ablation, figures, and a four-page technical note.
 
 ## Evidence package
 
 - `results/g4/raw/g4_final_runs.csv`: 120 locked final-evaluation runs.
 - `results/g6/raw/g6_runs.csv`: 141 robustness and ablation runs.
-- `results/final_summary_table.csv`: compact supervisor-facing results.
+- `results/final_summary_table.csv`: compact summary results.
 - `figures/`: PNG and PDF figures regenerated from recorded results.
 - `docs/G5_ANALYSIS_REPORT.md`: paired uncertainty and adverse-tail diagnosis.
 - `docs/G6_ROBUSTNESS_ABLATION_REPORT.md`: component and threshold tests.

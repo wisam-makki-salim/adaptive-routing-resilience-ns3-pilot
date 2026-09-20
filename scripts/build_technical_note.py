@@ -152,13 +152,14 @@ for header_part in (section.header, section.even_page_header):
     header.alignment = WD_ALIGN_PARAGRAPH.RIGHT
     run = header.add_run("REPRODUCIBLE NETWORKING PILOT  |  SEPTEMBER 2026")
     run.font.name = "Arial"; run.font.size = Pt(7); run.font.color.rgb = RGBColor(90, 90, 90)
-footer = section.footer.paragraphs[0]
-footer.alignment = WD_ALIGN_PARAGRAPH.CENTER
-footer.add_run("Wisam Makki Salim  |  Germany PhD Strategy  |  ")
-field = OxmlElement("w:fldSimple"); field.set(qn("w:instr"), "PAGE")
-footer._p.append(field)
-for r in footer.runs:
-    r.font.name = "Arial"; r.font.size = Pt(7); r.font.color.rgb = RGBColor(90, 90, 90)
+for footer_part in (section.footer, section.even_page_footer):
+    footer = footer_part.paragraphs[0]
+    footer.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    footer.add_run("Wisam Makki Salim  |  Adaptive Routing Pilot  |  ")
+    field = OxmlElement("w:fldSimple"); field.set(qn("w:instr"), "PAGE")
+    footer._p.append(field)
+    for r in footer.runs:
+        r.font.name = "Arial"; r.font.size = Pt(7); r.font.color.rgb = RGBColor(90, 90, 90)
 
 # Page 1
 title = doc.add_paragraph(style="Title")
@@ -174,7 +175,7 @@ r = author.add_run("Wisam Makki Salim\nComputer Engineering Researcher  |  Al-Ir
 r.bold = True; r.font.size = Pt(8.4)
 
 heading(doc, "Abstract")
-body(doc, "This pilot tests whether lightweight OLSR timer adaptation can preserve service under mobility, link degradation, and node failure. A reproducible ns-3.47 experiment compares standard OLSR with a controller that reacts to weak signals and final transmission failures. The evaluation uses a 16-node wireless ad hoc topology, two UDP flows, three controlled scenarios, and 20 paired seeds per comparison. The locked evaluation does not support the original superiority hypothesis: service effects vary across seeds while routing overhead rises whenever adaptation triggers. Component ablation isolates accelerated HELLO messaging as the source of an adverse cross-flow tail. A lower failure threshold yields exploratory gains but remains unconfirmed. The contribution is executable evidence about when a plausible adaptive action fails, why it fails in the tested configuration, and how to redesign the question for doctoral research.")
+body(doc, "This study tests whether lightweight OLSR timer adaptation can preserve service under mobility, link degradation, and node failure. An ns-3.47 experiment compares standard OLSR with a controller that reacts to weak signals and final transmission failures. The evaluation uses a 16-node wireless ad hoc topology, two UDP flows, three controlled scenarios, and 20 paired runs per comparison. The results do not support the original superiority hypothesis: service effects vary across runs, while routing overhead rises whenever adaptation triggers. Component ablation identifies accelerated HELLO messaging as the source of an adverse cross-flow tail in the tested configuration. A lower failure threshold shows exploratory gains but still requires independent evaluation.")
 
 heading(doc, "Research Question and Hypothesis")
 body(doc, "Can a lightweight adaptive routing-control mechanism improve service resilience under changing mobility, link degradation, and failure conditions compared with a static baseline, without introducing excessive latency or routing overhead?")
@@ -206,7 +207,7 @@ body(doc, "Scenario A acts as a negative control: baseline and adaptive outputs 
 table = doc.add_table(rows=1, cols=5)
 widths = [0.55, 1.25, 1.5, 1.5, 2.2]
 for i, w in enumerate(widths): table.columns[i].width = Inches(w)
-headers = ["Case", "Median PDR baseline", "Median PDR adaptive", "Mean paired PDR effect 95 percent CI", "Evidence" ]
+headers = ["Case", "Median PDR baseline", "Median PDR adaptive", "Mean PDR difference (95% CI)", "Evidence" ]
 for i, text in enumerate(headers): table.rows[0].cells[i].text = text
 rows = [
     ("A", "100.00%", "100.00%", "0.000  [0.000, 0.000]", "No trigger; identical outputs"),
@@ -252,7 +253,7 @@ for row in [
 style_table(table, font_size=7.2)
 
 heading(doc, "Causal Boundary")
-body(doc, "The ablation provides strong within-simulation evidence that accelerated HELLO messaging creates the run 102 outcome. It does not establish the lower-level cause. The available traces cannot distinguish transient routing-state inconsistency from wireless contention or another OLSR interaction. That distinction requires additional instrumentation rather than inference from aggregate delivery.")
+body(doc, "Within this simulation, the ablation links the run 102 outcome to accelerated HELLO messaging. It does not establish the lower-level mechanism. The available traces cannot distinguish transient routing-state inconsistency from wireless contention or another OLSR interaction. That distinction requires additional instrumentation rather than inference from aggregate delivery.")
 
 # Page 4
 page_break(doc)
@@ -270,7 +271,7 @@ body(doc, "The pilot uses one topology family, one density, two constant-rate fl
 body(doc, "A doctoral extension should replace unconditional timer acceleration with guarded control that combines link risk, route state, and congestion evidence; limits the duration and scope of HELLO changes; and treats cross-flow harm as a first-class outcome. Confirmation requires fresh seeds, multiple mobility and topology families, heterogeneous traffic, and explicit tail-risk and fairness measures. Adversarial disruption can then be introduced as a separate controlled factor.")
 
 heading(doc, "Conclusion")
-body(doc, "The original timer-switching mechanism does not provide reliable evidence of improved resilience. It raises overhead and can create severe cross-flow harm after failure. The pilot nevertheless meets its proof-of-execution goal: it provides reproducible code, controlled baselines, uncertainty analysis, diagnostic traces, and an ablation that turns a failed assumption into a precise doctoral research question.")
+body(doc, "The original timer-switching mechanism does not provide reliable evidence of improved resilience. It raises overhead and can create severe cross-flow harm after failure. The resulting code, controlled comparisons, uncertainty analysis, diagnostic traces, and component ablation provide a reproducible basis for studying safer adaptive control.")
 
 heading(doc, "References")
 for ref in [
@@ -283,8 +284,9 @@ for ref in [
     for run in p.runs: run.font.size = Pt(7.2)
 
 doc.core_properties.title = "Adaptive Routing under Mobility and Failures"
-doc.core_properties.subject = "Reproducible ns-3 research pilot for German PhD supervisor outreach"
+doc.core_properties.subject = "Reproducible ns-3 study of adaptive OLSR control"
 doc.core_properties.author = "Wisam Makki Salim"
 doc.core_properties.keywords = "ns-3, OLSR, adaptive routing, resilient networking, reproducibility"
+doc.core_properties.comments = ""
 doc.save(OUT)
 print(OUT)

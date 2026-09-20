@@ -54,7 +54,7 @@ The relationship is not monotonic evidence of an optimal threshold. At -78 dBm t
 
 ## 4. Robustness conclusion
 
-1. The original full adaptive mechanism is not robust enough for a supervisor-facing superiority claim.
+1. The original full adaptive mechanism does not support a superiority claim.
 2. The main design error is unconditional HELLO acceleration after a trigger; it can cause network-wide harm to another flow.
 3. Detection is not the problem: detection-only produces baseline-equivalent behavior.
 4. TC acceleration alone adds no consistent cost or service benefit in this configuration.
@@ -73,4 +73,4 @@ The relationship is not monotonic evidence of an optimal threshold. At -78 dBm t
 
 ## Gate boundary
 
-G6 is complete. G7 packaging, technical-note writing, and supervisor-facing communication have not been executed.
+G6 is complete. The technical note and final research package are documented in `docs/G7_RESEARCH_PACKAGE_REPORT.md`.

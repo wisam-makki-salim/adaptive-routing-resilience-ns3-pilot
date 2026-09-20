@@ -1,6 +1,6 @@
 # Adaptive Routing under Mobility and Failures
 
-## A Reproducible ns 3 Pilot with Robustness and Component Ablation
+## A Reproducible ns-3 Pilot with Robustness and Component Ablation
 
 **Wisam Makki Salim**  
 Computer Engineering Researcher  
@@ -9,13 +9,13 @@ ORCID 0009-0000-6998-3912
 
 ## Abstract
 
-This pilot tests whether a lightweight adaptive routing-control mechanism can improve service resilience when mobility, link degradation, or node failure changes network conditions. A reproducible ns-3.47 experiment compares standard OLSR with a controller that monitors received signal strength and final transmission failures, then temporarily shortens OLSR HELLO and topology-control intervals. The evaluation uses a 16-node wireless ad hoc topology, two concurrent UDP flows, three controlled scenarios, and 20 paired random seeds per comparison. The locked evaluation does not support the original superiority hypothesis. Delivery and recovery effects vary across seeds, while normalized routing overhead increases whenever adaptation triggers. A component ablation shows that HELLO acceleration, rather than event detection or topology-control acceleration, reproduces both the overhead and an adverse cross-flow tail event. A lower failure threshold produces exploratory gains, but it remains a redesign candidate because it has not been tested on independent seeds or another topology. The main contribution is executable evidence about when a plausible adaptive control action fails, why it fails in the tested configuration, and how it can be studied more safely in doctoral research.
+This study tests whether a lightweight adaptive routing-control mechanism can improve service resilience when mobility, link degradation, or node failure changes network conditions. An ns-3.47 experiment compares standard OLSR with a controller that monitors received signal strength and final transmission failures, then temporarily shortens OLSR HELLO and topology-control intervals. The evaluation uses a 16-node wireless ad hoc topology, two concurrent UDP flows, three controlled scenarios, and 20 paired runs per comparison. The results do not support the original superiority hypothesis. Delivery and recovery effects vary across runs, while normalized routing overhead increases whenever adaptation triggers. Component ablation shows that HELLO acceleration, rather than event detection or topology-control acceleration, reproduces both the overhead and an adverse cross-flow tail event. A lower failure threshold produces exploratory gains but has not been tested on independent runs or another topology.
 
 ## Research Question and Hypothesis
 
 The research question is: Can a lightweight adaptive routing-control mechanism improve service resilience under changing mobility, link degradation, and failure conditions compared with a static baseline, without introducing excessive latency or routing overhead?
 
-The preregistered working hypothesis was that event-triggered OLSR timer adaptation would reduce disruption and recovery time while keeping delay and control overhead within a modest range. The experiment was designed to test this claim rather than assume that faster routing control is beneficial.
+The pre-specified working hypothesis was that event-triggered OLSR timer adaptation would reduce disruption and recovery time while keeping delay and control overhead within a modest range. The experiment was designed to test this claim rather than assume that faster routing control is beneficial.
 
 ## Experimental Design
 
@@ -57,7 +57,7 @@ This direction follows directly from the pilot's strongest result: adaptation ne
 
 ## Conclusion
 
-The original timer-switching mechanism does not provide robust evidence of improved resilience. It raises control overhead and can create severe cross-flow harm after failure. Component ablation identifies HELLO acceleration as the responsible action, while detection alone is neutral. The pilot therefore succeeds as a proof of execution and as a disciplined negative result. It replaces an untested assumption about faster control with reproducible evidence and a precise redesign question for doctoral study.
+The original timer-switching mechanism does not provide robust evidence of improved resilience. It raises control overhead and can create severe cross-flow harm after failure. Component ablation identifies HELLO acceleration as the responsible action, while detection alone is neutral. The resulting code, controlled comparisons, uncertainty analysis, and diagnostic traces provide a reproducible basis for studying safer adaptive control.
 
 ## References
 

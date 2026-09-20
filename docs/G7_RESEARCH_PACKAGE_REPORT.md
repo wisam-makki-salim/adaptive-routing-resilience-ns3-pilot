@@ -4,7 +4,7 @@
 
 **G7 = PASS.** The technical note renders as four Letter-size pages without clipping, overlap, missing figures, or broken tables. The DOCX and PDF contain the same final content. The repository scripts pass syntax checks, and the final archive passes ZIP integrity validation.
 
-## Supervisor Package
+## Research Package
 
 - `Wisam_Makki_Salim_Adaptive_Routing_Pilot_Technical_Note.pdf`
 - `Wisam_Makki_Salim_Adaptive_Routing_Pilot_Technical_Note.docx`
@@ -20,4 +20,4 @@ The package presents the original mechanism as unsupported, identifies HELLO acc
 
 ## Gate Boundary
 
-G8 supervisor-specific alignment and follow-up emails are not part of this package.
+Supervisor-specific alignment and follow-up correspondence are outside the scope of this repository.
