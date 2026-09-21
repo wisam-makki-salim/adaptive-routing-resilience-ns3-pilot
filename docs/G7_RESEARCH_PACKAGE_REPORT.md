@@ -6,7 +6,7 @@
 
 ## Research Package
 
-- `Wisam_Makki_Salim_Adaptive_Routing_Pilot_Technical_Note.pdf`
+- `Wisam_Makki_Salim_ns3_Technical_Pilot_Adaptive_Routing.pdf`
 - `Wisam_Makki_Salim_Adaptive_Routing_Pilot_Technical_Note.docx`
 - `docs/SUPERVISOR_FACING_SUMMARY.md`
 - `docs/GITHUB_DESCRIPTION.md`

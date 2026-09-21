@@ -10,7 +10,7 @@ Can a lightweight adaptive routing-control mechanism improve service resilience 
 
 The locked evaluation does not support a general superiority claim. Adaptive service effects vary across paired seeds, while routing overhead increases whenever the controller reacts. Component ablation shows that shortening the OLSR HELLO interval reproduces the full mechanism's cost and adverse tail; event detection without timer changes reproduces the baseline exactly. A lower failure threshold is retained as an exploratory redesign candidate for independent validation.
 
-The [four-page technical research note](Wisam_Makki_Salim_Adaptive_Routing_Pilot_Technical_Note.pdf) provides a compact account of the study.
+The [four-page technical research note](Wisam_Makki_Salim_ns3_Technical_Pilot_Adaptive_Routing.pdf) provides a compact account of the study.
 
 ## Repository contents
 
