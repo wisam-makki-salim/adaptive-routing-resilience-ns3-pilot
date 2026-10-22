@@ -1,0 +1,13 @@
+scenario,mechanism,runs_with_any_trigger,signal_transitions,failure_transitions,recoveries
+A,baseline,0,0,0,0
+A,always_on,0,0,0,0
+A,triggered,3,0,4,0
+B,baseline,0,0,0,0
+B,always_on,0,0,0,0
+B,triggered,30,70,2,0
+C,baseline,0,0,0,0
+C,always_on,0,0,0,0
+C,triggered,27,0,29,0
+D,baseline,0,0,0,0
+D,always_on,0,0,0,0
+D,triggered,30,80,1,7

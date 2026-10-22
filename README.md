@@ -1,27 +1,42 @@
-# Adaptive Routing under Mobility and Failures
+# When Should Adaptive Network Recovery Be Triggered
 
-A reproducible ns-3 pilot that evaluates lightweight OLSR adaptation under normal operation, gradual link degradation, and node failure.
+A reproducible ns-3.47 pilot comparing static OLSR, always-on fast control, and state-triggered timer adaptation under stable, progressive, abrupt, and repeated network disturbances.
 
 ## Research question
 
-Can a lightweight adaptive routing-control mechanism improve service resilience under changing mobility, link degradation, and failure conditions compared with a static baseline, without introducing excessive latency or routing overhead?
+When does state-triggered OLSR timer adaptation improve packet-delivery resilience relative to static OLSR and always-on fast control, and what control-overhead and harmful-tail costs accompany any improvement?
 
 ## Main finding
 
-The locked evaluation does not support a general superiority claim. Adaptive service effects vary across paired seeds, while routing overhead increases whenever the controller reacts. Component ablation shows that shortening the OLSR HELLO interval reproduces the full mechanism's cost and adverse tail; event detection without timer changes reproduces the baseline exactly. A lower failure threshold is retained as an exploratory redesign candidate for independent validation.
+The v2 experiment contains 360 fresh paired runs. Always-on fast control improves mean delivery under progressive mobility, abrupt failure, and repeated disturbance, but adds substantial control overhead and usually increases p95 delay. The pre-specified state-triggered rule does not reproduce that delivery benefit reliably and triggers in 3 of 30 stable runs. It is therefore not presented as a validated controller.
 
-The [four-page technical research note](Wisam_Makki_Salim_ns3_Technical_Pilot_Adaptive_Routing.pdf) provides a compact account of the study.
+The complete interpretation is in [Pilot Study v2 Results](docs/V2_RESULTS_REPORT.md). The [research protocol](docs/V2_RESEARCH_PROTOCOL.md), [independent audit](docs/V2_AUDIT_REPORT.md), and [scientific review](docs/V2_INDEPENDENT_REVIEW.md) define the evidence and claim boundaries.
+
+An [independent clean-build reproduction record](docs/V2_INDEPENDENT_REPRODUCTION.md)
+documents a complete ns-3.47 rebuild and 360-run rerun. The regenerated raw CSV
+matched the committed raw CSV byte for byte.
+
+The supervisor package includes a [two-page research brief](deliverables/Wisam_Makki_Salim_Supervisor_Ready_Research_Brief_v2.pdf) and a [four-page technical report](deliverables/Wisam_Makki_Salim_Pilot_Study_v2_Technical_Report.pdf). Editable Word versions are stored beside the PDFs.
 
 ## Repository contents
 
-The repository includes executable simulations, fixed configurations, raw and processed results, uncertainty analysis, diagnostic traces, component ablation, figures, and a four-page technical note.
+The repository includes executable simulations, fixed configurations, raw and processed results, uncertainty analysis, diagnostic traces, component ablation, figures, and a compact supervisor package.
 
 ## Evidence package
 
 - `results/g4/raw/g4_final_runs.csv`: 120 locked final-evaluation runs.
 - `results/g6/raw/g6_runs.csv`: 141 robustness and ablation runs.
+- `results/v2/raw/v2_runs.csv`: 360 fresh B0/B1/B2 runs.
+- `results/v2/v2_pairwise_comparison.csv`: paired effects for all three comparisons.
+- `results/v2/v2_canonical_summary.json`: single canonical source for estimates and confidence intervals used by tables, figures, and documents.
+- `results/v2/v2_recovery_summary.csv`: recovery success and conditional times without treating sentinel values as durations.
 - `results/final_summary_table.csv`: compact summary results.
-- `figures/`: PNG and PDF figures regenerated from recorded results.
+- `figures/v2/`: three figures regenerated from v2 outputs.
+- `deliverables/`: two-page brief and four-page report in Word and PDF.
+- `docs/V2_SUPERVISOR_READINESS.md`: evidence-based readiness rubric.
+- `docs/V2_NEXT_RESEARCH_STEPS.md`: three bounded doctoral directions.
+- `docs/V2_INDEPENDENT_REPRODUCTION.md`: clean-build environment and full rerun record.
+- `docs/SUPERVISOR_RELEVANCE_LANGENDOERFER.md`: supervisor-specific relevance paragraph.
 - `docs/G5_ANALYSIS_REPORT.md`: paired uncertainty and adverse-tail diagnosis.
 - `docs/G6_ROBUSTNESS_ABLATION_REPORT.md`: component and threshold tests.
 - `docs/SUPERVISOR_FACING_SUMMARY.md`: concise outreach summary.
@@ -78,6 +93,17 @@ This regenerates all 120 final runs and the raw, descriptive-summary, and paired
 ## Reproducibility note
 
 The smoke test fixes the ns-3 seed and accepts an independent run number. Development runs are separate from the final evaluation seeds locked in G0.
+
+## Pilot Study v2
+
+```bash
+export NS3_ROOT=/absolute/path/to/ns-3.47
+V2_JOBS=6 bash scripts/run_v2_experiments.sh
+```
+
+The script anchors the disturbed node to the static B0 route for each fresh run,
+executes 360 schema-checked simulations, retains a log for every run, and regenerates
+the paired tables and figures. The locked design is in `configs/v2_experiment.yaml`.
 
 ## G5 paired analysis
 

@@ -19,3 +19,4 @@ cmake-cache/
 .vscode/
 .idea/
 *~
+tools/
