@@ -1,0 +1,46 @@
+gate: V2-confirmatory-pilot
+simulator: ns-3.47
+seed: 20260920
+fresh_runs: [201, 230]
+paired_design: true
+disturbance_target: fixed_from_static_B0_route_for_each_run
+mechanisms:
+  B0_static:
+    command_value: baseline
+    hello_interval_s: 2.0
+    tc_interval_s: 5.0
+  B1_always_on:
+    command_value: always_on
+    hello_interval_s: 0.5
+    tc_interval_s: 1.0
+  B2_state_triggered:
+    command_value: triggered
+    risk_threshold_dbm: -81.0
+    final_tx_failure_threshold: 20
+    hello_interval_s_when_triggered: 0.5
+    tc_interval_s_when_triggered: 1.0
+scenarios:
+  A: stable_negative_control
+  B: progressive_single_mobility_disturbance
+  C: abrupt_next_hop_radio_failure
+  D: repeated_out_and_back_mobility_disturbance
+primary_outcome: packet_delivery_ratio_percent
+guardrail_outcomes:
+  - minimum_flow_packet_delivery_ratio_percent
+  - normalized_olsr_control_bytes_per_delivered_payload_byte
+  - recovery_seconds
+  - delay_p95_ms
+  - route_unavailable_samples
+analysis:
+  estimand: paired_mechanism_minus_static_difference
+  confidence_interval: paired_percentile_bootstrap
+  bootstrap_resamples: 50000
+  bootstrap_seed: 20261022
+  report_all_runs: true
+  multiplicity_policy: estimation_first_no_significance_claims
+replication_rationale: >-
+  Thirty fresh paired runs provide an independent confirmation set while keeping
+  the 360-run pilot computationally feasible. The earlier Scenario C variance
+  shows that this sample is not adequate for a narrow superiority claim; the
+  analysis therefore reports effect distributions, confidence intervals, and
+  harmful-tail frequency rather than binary significance conclusions.

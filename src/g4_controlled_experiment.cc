@@ -33,6 +33,7 @@ static std::map<Ipv4Address, Mac48Address> g_ipToMac;
 static std::map<Ipv4Address, uint32_t> g_ipToNode;
 static NetDeviceContainer g_devices;
 static int32_t g_disruptedNode = -1;
+static int32_t g_requestedDisruptedNode = -1;
 static std::vector<Ipv4Address> g_lastSourceNextHops(2);
 static std::vector<bool> g_hadSourceRoute(2, false);
 
@@ -180,7 +181,8 @@ GetActiveNextHopNode()
 static void
 StartMobilityDegradation()
 {
-    g_disruptedNode = GetActiveNextHopNode();
+    g_disruptedNode = g_requestedDisruptedNode >= 0 ? g_requestedDisruptedNode
+                                                    : GetActiveNextHopNode();
     if (g_disruptedNode < 0)
     {
         return;
@@ -203,9 +205,39 @@ StartMobilityDegradation()
 }
 
 static void
+StartRepeatedMobilityDisturbance()
+{
+    g_disruptedNode = g_requestedDisruptedNode >= 0 ? g_requestedDisruptedNode
+                                                    : GetActiveNextHopNode();
+    if (g_disruptedNode < 0)
+    {
+        return;
+    }
+    Ptr<WaypointMobilityModel> model =
+        NodeList::GetNode(g_disruptedNode)->GetObject<WaypointMobilityModel>();
+    const Vector origin = model->GetPosition();
+    Vector displaced(origin.x * 2.5, origin.y * 2.5, 0.0);
+    if (std::abs(displaced.x) < 10.0)
+    {
+        displaced.x -= 90.0;
+    }
+    if (std::abs(displaced.y) < 10.0)
+    {
+        displaced.y -= 90.0;
+    }
+    model->AddWaypoint(Waypoint(Seconds(50.0), origin));
+    model->AddWaypoint(Waypoint(Seconds(65.0), displaced));
+    model->AddWaypoint(Waypoint(Seconds(75.0), origin));
+    model->AddWaypoint(Waypoint(Seconds(90.0), displaced));
+    model->AddWaypoint(Waypoint(Seconds(105.0), origin));
+    model->AddWaypoint(Waypoint(Seconds(120.0), origin));
+}
+
+static void
 FailActiveNextHop()
 {
-    g_disruptedNode = GetActiveNextHopNode();
+    g_disruptedNode = g_requestedDisruptedNode >= 0 ? g_requestedDisruptedNode
+                                                    : GetActiveNextHopNode();
     if (g_disruptedNode < 0)
     {
         return;
@@ -222,8 +254,8 @@ ComputeRecoverySeconds(const std::string& scenario)
     {
         return -1.0;
     }
-    const uint32_t eventSecond = scenario == "B" ? 75 : 60;
-    const uint32_t preStart = scenario == "B" ? 40 : 50;
+    const uint32_t eventSecond = scenario == "B" ? 75 : (scenario == "D" ? 105 : 60);
+    const uint32_t preStart = scenario == "B" || scenario == "D" ? 40 : 50;
     std::vector<uint64_t> pre(g_rxBins.begin() + preStart,
                               g_rxBins.begin() + preStart + 10);
     std::sort(pre.begin(), pre.end());
@@ -257,10 +289,12 @@ main(int argc, char* argv[])
     double reactiveHelloSeconds = 0.5;
     double reactiveTcSeconds = 1.0;
     uint32_t run = 101;
+    int32_t disruptedNode = -1;
     CommandLine cmd(__FILE__);
-    cmd.AddValue("scenario", "A, B, or C", scenario);
-    cmd.AddValue("mechanism", "baseline or adaptive", mechanism);
+    cmd.AddValue("scenario", "A, B, C, or D", scenario);
+    cmd.AddValue("mechanism", "baseline, always_on, triggered, or legacy adaptive", mechanism);
     cmd.AddValue("run", "Independent ns-3 run number", run);
+    cmd.AddValue("disruptedNode", "Fixed disturbance target; -1 selects the active next hop", disruptedNode);
     cmd.AddValue("tracePrefix", "Optional prefix for detailed G5 CSV traces", tracePrefix);
     cmd.AddValue("riskThresholdDbm", "Adaptive signal-risk threshold", riskThresholdDbm);
     cmd.AddValue("finalFailureThreshold", "Final Tx failures required to react", finalFailureThreshold);
@@ -269,8 +303,9 @@ main(int argc, char* argv[])
     cmd.AddValue("reactiveHelloSeconds", "Reactive OLSR HELLO interval", reactiveHelloSeconds);
     cmd.AddValue("reactiveTcSeconds", "Reactive OLSR TC interval", reactiveTcSeconds);
     cmd.Parse(argc, argv);
-    if ((scenario != "A" && scenario != "B" && scenario != "C") ||
-        (mechanism != "baseline" && mechanism != "adaptive"))
+    if ((scenario != "A" && scenario != "B" && scenario != "C" && scenario != "D") ||
+        (mechanism != "baseline" && mechanism != "always_on" &&
+         mechanism != "triggered" && mechanism != "adaptive") || disruptedNode > 15)
     {
         std::cerr << "Invalid scenario or mechanism" << std::endl;
         return 2;
@@ -278,6 +313,7 @@ main(int argc, char* argv[])
 
     RngSeedManager::SetSeed(20260920);
     RngSeedManager::SetRun(run);
+    g_requestedDisruptedNode = disruptedNode;
     constexpr uint32_t nodeCount = 16;
     constexpr uint32_t packetSize = 512;
 
@@ -330,8 +366,11 @@ main(int argc, char* argv[])
     g_devices = devices;
 
     OlsrHelper olsr;
-    olsr.Set("HelloInterval", TimeValue(Seconds(2.0)));
-    olsr.Set("TcInterval", TimeValue(Seconds(5.0)));
+    const bool alwaysOn = mechanism == "always_on";
+    olsr.Set("HelloInterval",
+             TimeValue(Seconds(alwaysOn ? reactiveHelloSeconds : 2.0)));
+    olsr.Set("TcInterval",
+             TimeValue(Seconds(alwaysOn ? reactiveTcSeconds : 5.0)));
     Ipv4ListRoutingHelper routing;
     routing.Add(olsr, 10);
     InternetStackHelper internet;
@@ -357,7 +396,7 @@ main(int argc, char* argv[])
     const std::vector<uint16_t> ports{9000, 9001};
     g_flowDestinations = {interfaces.GetAddress(15), interfaces.GetAddress(12)};
 
-    if (mechanism == "adaptive")
+    if (mechanism == "adaptive" || mechanism == "triggered")
     {
         for (uint32_t node = 0; node < nodeCount; ++node)
         {
@@ -418,6 +457,10 @@ main(int argc, char* argv[])
     if (scenario == "C")
     {
         Simulator::Schedule(Seconds(60.0), &FailActiveNextHop);
+    }
+    if (scenario == "D")
+    {
+        Simulator::Schedule(Seconds(50.0), &StartRepeatedMobilityDisturbance);
     }
 
     FlowMonitorHelper flowHelper;
