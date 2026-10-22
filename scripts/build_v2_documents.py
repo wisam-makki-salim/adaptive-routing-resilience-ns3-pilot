@@ -10,6 +10,7 @@ from docx.enum.table import WD_ALIGN_VERTICAL, WD_TABLE_ALIGNMENT
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
+from docx.opc.constants import RELATIONSHIP_TYPE as RT
 from docx.shared import Inches, Pt, RGBColor
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -176,6 +177,26 @@ def add_body(doc, text, bold_lead=None):
     return p
 
 
+def add_hyperlink(paragraph, text, url):
+    """Add a real external hyperlink rather than URL-shaped plain text."""
+    relationship_id = paragraph.part.relate_to(url, RT.HYPERLINK, is_external=True)
+    hyperlink = OxmlElement("w:hyperlink")
+    hyperlink.set(qn("r:id"), relationship_id)
+    run = OxmlElement("w:r")
+    run_properties = OxmlElement("w:rPr")
+    color = OxmlElement("w:color")
+    color.set(qn("w:val"), "0563C1")
+    underline = OxmlElement("w:u")
+    underline.set(qn("w:val"), "single")
+    run_properties.extend([color, underline])
+    text_node = OxmlElement("w:t")
+    text_node.text = text
+    run.extend([run_properties, text_node])
+    hyperlink.append(run)
+    paragraph._p.append(hyperlink)
+    return hyperlink
+
+
 def add_bullets(doc, items):
     for item in items:
         p = doc.add_paragraph(style="List Bullet")
@@ -239,19 +260,19 @@ def build_brief():
     doc = Document()
     set_metadata(
         doc,
-        "Supervisor Ready PhD Research Brief",
+        "When Should Adaptive Network Recovery Be Triggered",
         "Adaptive OLSR resilience and control cost pilot study",
     )
     configure(doc)
     add_title(
         doc,
-        "Supervisor Ready PhD Research Brief",
         "When Should Adaptive Network Recovery Be Triggered",
+        "A Reproducible ns-3.47 Pilot on OLSR Resilience and Control Cost",
     )
     add_heading(doc, "Research context")
     add_body(
         doc,
-        "Fast routing control can shorten disruption, but periodic HELLO and topology messages consume wireless capacity and may destabilize service. Prior work already establishes adaptive MANET routing and adaptive HELLO messaging. The practical question here is narrower: when should faster control be active, and at what cost?",
+        "Fast routing control can shorten disruption, but periodic HELLO and topology messages consume wireless capacity and may destabilize service. Adaptive MANET routing and adaptive HELLO messaging have been studied previously (Qin and Kunz, 2008; Han and Lee, 2013). The practical question here is narrower: when should faster control be active, and at what cost?",
     )
     add_heading(doc, "Research question")
     add_body(
@@ -274,10 +295,18 @@ def build_brief():
         ],
         [0.75, 4.75, 1.2],
     )
-    add_heading(doc, "Evidence produced")
+    add_heading(doc, "Evidence and reproducibility")
     add_body(
         doc,
-        "The package contains 360 fresh paired runs, per-run logs, raw and processed tables, deterministic bootstrap intervals, three regenerated figures, and explicit checks for missing rows and disturbance-target mismatches.",
+        "The package contains 360 fresh paired runs, per-run logs, raw and processed tables, deterministic keyed-bootstrap intervals, and checks for missing rows and disturbance-target mismatches. A clean ns-3.47 rebuild and full rerun in a separate directory reproduced the committed raw CSV byte for byte; regenerated tables and figures reported zero confidence-interval mismatches. This was an isolated rerun on the same host, not a third-party replication.",
+    )
+    p = doc.add_paragraph()
+    p.paragraph_format.space_after = Pt(2)
+    r = p.add_run("Selected sources. ")
+    r.bold = True
+    p.add_run(
+        "Qin L, Kunz T. Adaptive MANET Routing: A Case Study. ADHOC-NOW 2008. doi:10.1007/978-3-540-85209-4_4. "
+        "Han SY, Lee D. IEEE Communications Letters. 2013;17(5):1040-1043. doi:10.1109/LCOMM.2013.040213.130076."
     )
     doc.add_page_break()
     add_heading(doc, "Verified findings")
@@ -309,10 +338,15 @@ def build_brief():
         doc,
         "The next step is a guarded trigger and exit policy that combines route state with channel-load evidence, caps reactive duration, and treats worst-flow harm as a constraint. Confirmation requires fresh development and evaluation seeds, several topology and mobility families, heterogeneous traffic, and selected testbed checks.",
     )
-    add_heading(doc, "Repository and feasibility")
-    add_body(
-        doc,
-        "Repository: https://github.com/wisam-makki-salim/adaptive-routing-resilience-ns3-pilot. The work is suitable for an externally conducted doctorate because simulation, analysis, and documentation can be performed remotely; short visits could support design review and physical validation. Any formal arrangement remains subject to the supervisor and university regulations.",
+    add_heading(doc, "Reproducibility and access")
+    p = doc.add_paragraph()
+    p.add_run(
+        "The published repository provides the locked protocol, source code, commands, raw and processed results, canonical statistics, figures, and clean-build reproduction record: "
+    )
+    add_hyperlink(
+        p,
+        "github.com/wisam-makki-salim/adaptive-routing-resilience-ns3-pilot",
+        "https://github.com/wisam-makki-salim/adaptive-routing-resilience-ns3-pilot",
     )
     path = OUT / "Wisam_Makki_Salim_Supervisor_Ready_Research_Brief_v2.docx"
     doc.save(path)

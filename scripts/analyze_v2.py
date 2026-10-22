@@ -306,10 +306,10 @@ annotation_offsets = {
     ("always_on", "B"): (5, 7),
     ("always_on", "C"): (5, 7),
     ("always_on", "D"): (5, 7),
-    ("triggered", "A"): (5, 7),
-    ("triggered", "B"): (5, 10),
-    ("triggered", "C"): (5, -14),
-    ("triggered", "D"): (5, 7),
+    ("triggered", "A"): (6, 10),
+    ("triggered", "B"): (7, -2),
+    ("triggered", "C"): (7, -15),
+    ("triggered", "D"): (-1, 10),
 }
 for mechanism in mechanisms[1:]:
     marker, color, label = styles[mechanism]
