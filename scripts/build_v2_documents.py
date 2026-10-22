@@ -2,6 +2,7 @@
 """Build the supervisor brief and technical report from verified v2 results."""
 
 from datetime import UTC, datetime
+import json
 from pathlib import Path
 
 from docx import Document
@@ -17,6 +18,48 @@ OUT.mkdir(exist_ok=True)
 NAVY = "193A5A"
 PALE = "EAF1F7"
 GRAY = "D9D9D9"
+CANONICAL_PATH = ROOT / "results/v2/v2_canonical_summary.json"
+
+
+def load_canonical():
+    with CANONICAL_PATH.open(encoding="utf-8") as handle:
+        return json.load(handle)
+
+
+CANONICAL = load_canonical()
+
+
+def estimate(scenario, comparison, metric):
+    return CANONICAL["estimands"][f"{scenario}:{comparison}:{metric}"]
+
+
+def signed(value, digits=3):
+    return f"{value:+.{digits}f}"
+
+
+def effect_cell(scenario, comparison):
+    item = estimate(scenario, comparison, "pdr_percent")
+    return (
+        f"{signed(item['mean_difference'])} "
+        f"[{signed(item['mean_ci95_low'])}, {signed(item['mean_ci95_high'])}]"
+    )
+
+
+def overhead_cell(scenario, comparison):
+    return signed(estimate(scenario, comparison, "normalized_overhead")["mean_difference"], 5)
+
+
+def main_result_rows(labels):
+    return [
+        (
+            labels[scenario],
+            effect_cell(scenario, "always_on_minus_static"),
+            effect_cell(scenario, "triggered_minus_static"),
+            overhead_cell(scenario, "always_on_minus_static"),
+            overhead_cell(scenario, "triggered_minus_static"),
+        )
+        for scenario in "ABCD"
+    ]
 
 
 def set_metadata(doc, title, subject):
@@ -93,6 +136,10 @@ def configure(doc):
         style.font.color.rgb = RGBColor(0, 0, 0)
         style.paragraph_format.space_before = Pt(before)
         style.paragraph_format.space_after = Pt(after)
+    title_ppr = styles["Title"]._element.get_or_add_pPr()
+    title_borders = title_ppr.find(qn("w:pBdr"))
+    if title_borders is not None:
+        title_ppr.remove(title_borders)
     footer = section.footer.paragraphs[0]
     footer.alignment = WD_ALIGN_PARAGRAPH.CENTER
     run = footer.add_run("Wisam Makki Salim  |  Pilot Study v2  |  October 2026")
@@ -141,6 +188,10 @@ def add_table(doc, headers, rows, widths=None, font_size=8.3):
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
     table.autofit = False
     set_table_borders(table)
+    header_tr_pr = table.rows[0]._tr.get_or_add_trPr()
+    repeat_header = OxmlElement("w:tblHeader")
+    repeat_header.set(qn("w:val"), "true")
+    header_tr_pr.append(repeat_header)
     for i, text in enumerate(headers):
         cell = table.rows[0].cells[i]
         shade(cell, NAVY)
@@ -233,12 +284,7 @@ def build_brief():
     add_table(
         doc,
         ["Condition", "Always-on PDR effect", "Triggered PDR effect", "Always-on cost", "Triggered cost"],
-        [
-            ("Stable", "+0.571 [-0.629, +2.304]", "+0.432 [0.000, +1.296]", "+0.05410", "+0.00004"),
-            ("Progressive", "+1.591 [+1.214, +1.969]", "+0.108 [-0.069, +0.320]", "+0.05305", "+0.00307"),
-            ("Failure", "+1.453 [+1.054, +1.796]", "-0.117 [-0.279, +0.010]", "+0.05043", "+0.00111"),
-            ("Repeated", "+3.392 [+2.738, +4.044]", "+0.404 [-0.260, +1.050]", "+0.05357", "+0.00378"),
-        ],
+        main_result_rows({"A": "Stable", "B": "Progressive", "C": "Failure", "D": "Repeated"}),
         [1.05, 1.75, 1.75, 1.1, 1.1],
         7.6,
     )
@@ -333,12 +379,7 @@ def build_report():
     add_table(
         doc,
         ["Condition", "B1 PDR difference", "B2 PDR difference", "B1 overhead", "B2 overhead"],
-        [
-            ("A", "+0.571 [-0.629, +2.304]", "+0.432 [0.000, +1.296]", "+0.05410", "+0.00004"),
-            ("B", "+1.591 [+1.214, +1.969]", "+0.108 [-0.069, +0.320]", "+0.05305", "+0.00307"),
-            ("C", "+1.453 [+1.054, +1.796]", "-0.117 [-0.279, +0.010]", "+0.05043", "+0.00111"),
-            ("D", "+3.392 [+2.738, +4.044]", "+0.404 [-0.260, +1.050]", "+0.05357", "+0.00378"),
-        ],
+        main_result_rows({scenario: scenario for scenario in "ABCD"}),
         [0.7, 1.8, 1.8, 1.15, 1.15],
         7.7,
     )

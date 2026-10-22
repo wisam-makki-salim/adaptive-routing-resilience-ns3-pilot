@@ -2,6 +2,8 @@
 """Validate and analyze the fresh three-baseline Pilot Study v2 experiment."""
 
 import csv
+import hashlib
+import json
 import pathlib
 import sys
 
@@ -44,7 +46,8 @@ metrics = [
     "next_hop_changes",
     "route_unavailable_samples",
 ]
-rng = np.random.default_rng(20261022)
+BOOTSTRAP_SEED = 20261022
+BOOTSTRAP_RESAMPLES = 50_000
 
 
 def paired_values(scenario, mechanism, metric):
@@ -58,13 +61,77 @@ def paired_values(scenario, mechanism, metric):
     )
 
 
-def bootstrap_mean_ci(values):
-    samples = values[rng.integers(0, len(values), size=(50_000, len(values)))]
+def bootstrap_mean_ci(values, key):
+    """Return one reproducible interval for one named estimand.
+
+    The key-derived seed prevents the interval from depending on call order.  A
+    given scenario/comparison/metric therefore has one canonical interval in
+    tables, figures, and documents.
+    """
+    digest = hashlib.sha256(f"{BOOTSTRAP_SEED}:{key}".encode("utf-8")).digest()
+    seed = int.from_bytes(digest[:8], "big")
+    rng = np.random.default_rng(seed)
+    samples = values[rng.integers(0, len(values), size=(BOOTSTRAP_RESAMPLES, len(values)))]
     return np.percentile(np.mean(samples, axis=1), [2.5, 97.5])
 
 
+def comparison_values(scenario, left, right, metric):
+    return np.array(
+        [
+            float(index[(scenario, left, run)][metric])
+            - float(index[(scenario, right, run)][metric])
+            for run in runs
+        ],
+        dtype=float,
+    )
+
+
+comparisons = [
+    ("always_on_minus_static", "always_on", "baseline"),
+    ("triggered_minus_static", "triggered", "baseline"),
+    ("triggered_minus_always_on", "triggered", "always_on"),
+]
+
+canonical = {
+    "source": str(raw_path.relative_to(raw_path.parents[2])),
+    "bootstrap_seed": BOOTSTRAP_SEED,
+    "bootstrap_resamples": BOOTSTRAP_RESAMPLES,
+    "method": "paired percentile bootstrap of the mean",
+    "estimands": {},
+}
+for scenario in scenarios:
+    for label, left, right in comparisons:
+        for metric in metrics:
+            values = comparison_values(scenario, left, right, metric)
+            key = f"{scenario}:{label}:{metric}"
+            low, high = bootstrap_mean_ci(values, key)
+            canonical["estimands"][key] = {
+                "scenario": scenario,
+                "comparison": label,
+                "left": left,
+                "right": right,
+                "metric": metric,
+                "n_pairs": len(values),
+                "mean_difference": float(np.mean(values)),
+                "mean_ci95_low": float(low),
+                "mean_ci95_high": float(high),
+                "median_difference": float(np.median(values)),
+                "q1": float(np.percentile(values, 25)),
+                "q3": float(np.percentile(values, 75)),
+                "minimum": float(np.min(values)),
+                "maximum": float(np.max(values)),
+                "lower_count": int(np.sum(values < 0)),
+                "equal_count": int(np.sum(values == 0)),
+                "higher_count": int(np.sum(values > 0)),
+            }
+
+with (output_dir / "v2_canonical_summary.json").open("w", encoding="utf-8") as handle:
+    json.dump(canonical, handle, indent=2, sort_keys=True)
+    handle.write("\n")
+
+
 with (output_dir / "v2_paired_effects.csv").open("w", newline="", encoding="utf-8") as handle:
-    writer = csv.writer(handle)
+    writer = csv.writer(handle, lineterminator="\n")
     writer.writerow(["scenario", "mechanism", "run", "metric", "difference_vs_static"])
     for scenario in scenarios:
         for mechanism in mechanisms[1:]:
@@ -75,7 +142,7 @@ with (output_dir / "v2_paired_effects.csv").open("w", newline="", encoding="utf-
                     writer.writerow([scenario, mechanism, run, metric, f"{value - base:.9f}"])
 
 with (output_dir / "v2_effect_summary.csv").open("w", newline="", encoding="utf-8") as handle:
-    writer = csv.writer(handle)
+    writer = csv.writer(handle, lineterminator="\n")
     writer.writerow(
         [
             "scenario", "mechanism", "metric", "n_pairs", "mean_difference",
@@ -87,7 +154,10 @@ with (output_dir / "v2_effect_summary.csv").open("w", newline="", encoding="utf-
         for mechanism in mechanisms[1:]:
             for metric in metrics:
                 values = paired_values(scenario, mechanism, metric)
-                low, high = bootstrap_mean_ci(values)
+                record = canonical["estimands"][
+                    f"{scenario}:{mechanism}_minus_static:{metric}"
+                ]
+                low, high = record["mean_ci95_low"], record["mean_ci95_high"]
                 writer.writerow(
                     [
                         scenario, mechanism, metric, len(values), f"{np.mean(values):.9f}",
@@ -101,7 +171,7 @@ with (output_dir / "v2_effect_summary.csv").open("w", newline="", encoding="utf-
 with (output_dir / "v2_pairwise_comparison.csv").open(
     "w", newline="", encoding="utf-8"
 ) as handle:
-    writer = csv.writer(handle)
+    writer = csv.writer(handle, lineterminator="\n")
     writer.writerow(
         [
             "scenario", "comparison", "metric", "n_pairs", "mean_difference",
@@ -109,22 +179,12 @@ with (output_dir / "v2_pairwise_comparison.csv").open(
             "maximum", "lower_count", "equal_count", "higher_count",
         ]
     )
-    comparisons = [
-        ("always_on_minus_static", "always_on", "baseline"),
-        ("triggered_minus_static", "triggered", "baseline"),
-        ("triggered_minus_always_on", "triggered", "always_on"),
-    ]
     for scenario in scenarios:
         for label, left, right in comparisons:
             for metric in metrics:
-                values = np.array(
-                    [
-                        float(index[(scenario, left, run)][metric])
-                        - float(index[(scenario, right, run)][metric])
-                        for run in runs
-                    ]
-                )
-                low, high = bootstrap_mean_ci(values)
+                values = comparison_values(scenario, left, right, metric)
+                record = canonical["estimands"][f"{scenario}:{label}:{metric}"]
+                low, high = record["mean_ci95_low"], record["mean_ci95_high"]
                 writer.writerow(
                     [
                         scenario, label, metric, len(values), f"{np.mean(values):.9f}",
@@ -137,7 +197,7 @@ with (output_dir / "v2_pairwise_comparison.csv").open(
 with (output_dir / "v2_recovery_summary.csv").open(
     "w", newline="", encoding="utf-8"
 ) as handle:
-    writer = csv.writer(handle)
+    writer = csv.writer(handle, lineterminator="\n")
     writer.writerow(
         [
             "scenario", "mechanism", "n_runs", "recovered_runs", "not_recovered_runs",
@@ -163,7 +223,7 @@ with (output_dir / "v2_recovery_summary.csv").open(
 with (output_dir / "v2_trigger_summary.csv").open(
     "w", newline="", encoding="utf-8"
 ) as handle:
-    writer = csv.writer(handle)
+    writer = csv.writer(handle, lineterminator="\n")
     writer.writerow(
         [
             "scenario", "mechanism", "runs_with_any_trigger", "signal_transitions",
@@ -219,7 +279,10 @@ for mechanism in mechanisms[1:]:
     means, lows, highs = [], [], []
     for scenario in scenarios:
         values = paired_values(scenario, mechanism, "pdr_percent")
-        low, high = bootstrap_mean_ci(values)
+        record = canonical["estimands"][
+            f"{scenario}:{mechanism}_minus_static:pdr_percent"
+        ]
+        low, high = record["mean_ci95_low"], record["mean_ci95_high"]
         mean = np.mean(values)
         means.append(mean); lows.append(mean - low); highs.append(high - mean)
     x = np.arange(len(scenarios)) + offsets[mechanism]
@@ -253,8 +316,16 @@ for mechanism in mechanisms[1:]:
     for position, scenario in enumerate(scenarios):
         pdr = paired_values(scenario, mechanism, "pdr_percent")
         overhead = paired_values(scenario, mechanism, "normalized_overhead")
-        pdr_ci = bootstrap_mean_ci(pdr)
-        overhead_ci = bootstrap_mean_ci(overhead)
+        pdr_record = canonical["estimands"][
+            f"{scenario}:{mechanism}_minus_static:pdr_percent"
+        ]
+        overhead_record = canonical["estimands"][
+            f"{scenario}:{mechanism}_minus_static:normalized_overhead"
+        ]
+        pdr_ci = np.array([pdr_record["mean_ci95_low"], pdr_record["mean_ci95_high"]])
+        overhead_ci = np.array(
+            [overhead_record["mean_ci95_low"], overhead_record["mean_ci95_high"]]
+        )
         axis.errorbar(
             np.mean(overhead), np.mean(pdr),
             xerr=[[np.mean(overhead) - overhead_ci[0]], [overhead_ci[1] - np.mean(overhead)]],

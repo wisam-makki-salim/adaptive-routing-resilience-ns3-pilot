@@ -12,6 +12,10 @@ The v2 experiment contains 360 fresh paired runs. Always-on fast control improve
 
 The complete interpretation is in [Pilot Study v2 Results](docs/V2_RESULTS_REPORT.md). The [research protocol](docs/V2_RESEARCH_PROTOCOL.md), [independent audit](docs/V2_AUDIT_REPORT.md), and [scientific review](docs/V2_INDEPENDENT_REVIEW.md) define the evidence and claim boundaries.
 
+An [independent clean-build reproduction record](docs/V2_INDEPENDENT_REPRODUCTION.md)
+documents a complete ns-3.47 rebuild and 360-run rerun. The regenerated raw CSV
+matched the committed raw CSV byte for byte.
+
 The supervisor package includes a [two-page research brief](deliverables/Wisam_Makki_Salim_Supervisor_Ready_Research_Brief_v2.pdf) and a [four-page technical report](deliverables/Wisam_Makki_Salim_Pilot_Study_v2_Technical_Report.pdf). Editable Word versions are stored beside the PDFs.
 
 ## Repository contents
@@ -24,12 +28,14 @@ The repository includes executable simulations, fixed configurations, raw and pr
 - `results/g6/raw/g6_runs.csv`: 141 robustness and ablation runs.
 - `results/v2/raw/v2_runs.csv`: 360 fresh B0/B1/B2 runs.
 - `results/v2/v2_pairwise_comparison.csv`: paired effects for all three comparisons.
+- `results/v2/v2_canonical_summary.json`: single canonical source for estimates and confidence intervals used by tables, figures, and documents.
 - `results/v2/v2_recovery_summary.csv`: recovery success and conditional times without treating sentinel values as durations.
 - `results/final_summary_table.csv`: compact summary results.
 - `figures/v2/`: three figures regenerated from v2 outputs.
 - `deliverables/`: two-page brief and four-page report in Word and PDF.
 - `docs/V2_SUPERVISOR_READINESS.md`: evidence-based readiness rubric.
 - `docs/V2_NEXT_RESEARCH_STEPS.md`: three bounded doctoral directions.
+- `docs/V2_INDEPENDENT_REPRODUCTION.md`: clean-build environment and full rerun record.
 - `docs/SUPERVISOR_RELEVANCE_LANGENDOERFER.md`: supervisor-specific relevance paragraph.
 - `docs/G5_ANALYSIS_REPORT.md`: paired uncertainty and adverse-tail diagnosis.
 - `docs/G6_ROBUSTNESS_ABLATION_REPORT.md`: component and threshold tests.

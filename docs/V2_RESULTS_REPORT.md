@@ -25,10 +25,10 @@ generality outside it.
 
 | Condition | B1 PDR difference | B2 PDR difference | B1 overhead difference | B2 overhead difference |
 |---|---:|---:|---:|---:|
-| A stable | +0.571 [-0.629, +2.304] | +0.432 [0.000, +1.296] | +0.05410 | +0.00004 |
-| B progressive | +1.591 [+1.214, +1.969] | +0.108 [-0.069, +0.320] | +0.05305 | +0.00307 |
-| C failure | +1.453 [+1.054, +1.796] | -0.117 [-0.279, +0.010] | +0.05043 | +0.00111 |
-| D repeated | +3.392 [+2.738, +4.044] | +0.404 [-0.260, +1.050] | +0.05357 | +0.00378 |
+| A stable | +0.571 [-0.630, +2.312] | +0.432 [+0.000, +1.296] | +0.05410 | +0.00004 |
+| B progressive | +1.591 [+1.214, +1.971] | +0.108 [-0.069, +0.320] | +0.05305 | +0.00307 |
+| C failure | +1.453 [+1.055, +1.796] | -0.117 [-0.279, +0.010] | +0.05043 | +0.00111 |
+| D repeated | +3.392 [+2.736, +4.049] | +0.404 [-0.261, +1.055] | +0.05357 | +0.00378 |
 
 ## Findings
 
@@ -77,6 +77,8 @@ prolonged reactive states, or the full always-on cost.
 ## Reproducibility
 
 The locked configuration is in `configs/v2_experiment.yaml`. Execution uses
-`scripts/run_v2_experiments.sh`; `scripts/analyze_v2.py` produces the analysis and
-all three figures. Raw rows, per-run logs, target anchors, pairwise effects,
-recovery summaries, and trigger summaries are retained under `results/v2/`.
+`scripts/run_v2_experiments.sh`; `scripts/analyze_v2.py` produces one canonical
+JSON summary, the analysis tables, and all three figures. The key-derived
+bootstrap seed gives each named estimand one interval independent of call order.
+Raw rows, per-run logs, target anchors, pairwise effects, recovery summaries, and
+trigger summaries are retained under `results/v2/`.
